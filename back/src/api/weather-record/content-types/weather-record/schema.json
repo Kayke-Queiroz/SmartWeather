@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "weather_records",
+  "info": {
+    "singularName": "weather-record",
+    "pluralName": "weather-records",
+    "displayName": "Weather Record",
+    "description": "Stores weather search records"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "location": {
+      "type": "string",
+      "required": true
+    },
+    "latitude": {
+      "type": "decimal"
+    },
+    "longitude": {
+      "type": "decimal"
+    },
+    "startDate": {
+      "type": "date"
+    },
+    "endDate": {
+      "type": "date"
+    },
+    "weatherData": {
+      "type": "json"
+    }
+  }
+}
