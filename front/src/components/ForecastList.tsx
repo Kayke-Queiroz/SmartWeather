@@ -1,5 +1,6 @@
 import type { ForecastData } from '../services/api';
 import { format } from 'date-fns';
+import { Umbrella } from 'lucide-react';
 
 interface Props {
     data: ForecastData;
@@ -7,10 +8,30 @@ interface Props {
 
 export default function ForecastList({ data }: Props) {
     // Extract one forecast per day (around noon or closest available)
-    const dailyForecasts = data.list.filter(item => item.dt_txt.includes('12:00:00') || item.dt_txt.includes('15:00:00')).slice(0, 5);
+    const uniqueDays = new Set<string>();
+    let forecasts = data.list.filter(item => {
+        const date = item.dt_txt.split(' ')[0];
+        if (!uniqueDays.has(date) && (item.dt_txt.includes('12:00:00') || item.dt_txt.includes('15:00:00'))) {
+            uniqueDays.add(date);
+            return true;
+        }
+        return false;
+    });
 
-    // Fallback array slicer if API returns a weird timeframe
-    const forecasts = dailyForecasts.length === 5 ? dailyForecasts : data.list.filter((_, i) => i % 8 === 0).slice(0, 5);
+    // Fallback if we couldn't get 5 days around noon
+    if (forecasts.length < 5) {
+        uniqueDays.clear();
+        forecasts = data.list.filter(item => {
+            const date = item.dt_txt.split(' ')[0];
+            if (!uniqueDays.has(date)) {
+                uniqueDays.add(date);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    forecasts = forecasts.slice(0, 5);
 
     return (
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 w-full mb-6">
@@ -33,6 +54,11 @@ export default function ForecastList({ data }: Props) {
                             <span className="text-slate-300">/</span>
                             <span className="text-orange-500">{Math.round(day.main.temp_max)}°</span>
                         </div>
+                        {day.pop !== undefined && (
+                            <div className="flex items-center justify-center gap-1 text-xs font-semibold text-indigo-500 mt-2">
+                                <Umbrella className="w-3 h-3" /> {Math.round(day.pop * 100)}%
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>

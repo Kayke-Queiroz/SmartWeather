@@ -5,15 +5,17 @@ import ForecastList from '../components/ForecastList';
 import { weatherApi } from '../services/api';
 import type { WeatherData, ForecastData } from '../services/api';
 import { strapiApi } from '../services/strapiApi';
-import { generateWeatherInsight } from '../services/aiApi';
+import { generateWeatherInsight, type AIInsight } from '../services/aiApi';
+import { youtubeApi, type YoutubeVideo } from '../services/youtubeApi';
 import SearchHistory from '../components/SearchHistory';
-import { Search, Sparkles } from 'lucide-react';
+import { Search, Sparkles, Shirt, Activity, Lightbulb } from 'lucide-react';
 
 export default function Home() {
     const [query, setQuery] = useState('');
     const [weather, setWeather] = useState<WeatherData | null>(null);
     const [forecast, setForecast] = useState<ForecastData | null>(null);
-    const [insight, setInsight] = useState<string>('');
+    const [insight, setInsight] = useState<AIInsight | string | null>(null);
+    const [video, setVideo] = useState<YoutubeVideo | null | 'not_found'>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [refreshHistory, setRefreshHistory] = useState(0);
@@ -33,16 +35,52 @@ export default function Home() {
             setForecast(forecastData);
 
             // Fetch AI Insight gracefully (doesn't block the UI rendering)
-            generateWeatherInsight(weatherData.name, Math.round(weatherData.main.temp), weatherData.weather[0].description)
-                .then(aiTip => setInsight(aiTip));
+            generateWeatherInsight(weatherData).then(aiTip => setInsight(aiTip));
+
+            // Fetch YouTube video gracefully
+            youtubeApi.getVideoForLocation(weatherData.name).then(v => setVideo(v || 'not_found'));
 
             // Async save to Strapi without blocking the UI
             strapiApi.saveRecord(weatherData.name, weatherData).then(() => {
                 setRefreshHistory(prev => prev + 1); // Trigger history subcomponent to refresh
             });
 
-        } catch (err) {
-            setError('Failed to fetch weather data. Please try again.');
+        } catch (err: any) {
+            setError(err?.response?.status === 404 ? 'Location not found.' : 'Failed to fetch weather data. Please try again.');
+            setWeather(null);
+            setForecast(null);
+            setInsight(null);
+            setVideo(null);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleMapClick = async (lat: number, lon: number) => {
+        setLoading(true);
+        setError('');
+
+        try {
+            const weatherData = await weatherApi.getCurrentWeather({ lat, lon });
+            const forecastData = await weatherApi.getForecast({ lat, lon });
+
+            setQuery(weatherData.name);
+            setWeather(weatherData);
+            setForecast(forecastData);
+
+            generateWeatherInsight(weatherData).then(aiTip => setInsight(aiTip));
+            youtubeApi.getVideoForLocation(weatherData.name).then(v => setVideo(v || 'not_found'));
+
+            strapiApi.saveRecord(weatherData.name, weatherData).then(() => {
+                setRefreshHistory(prev => prev + 1);
+            });
+
+        } catch (err: any) {
+            setError(err?.response?.status === 404 ? 'Location not found.' : 'Failed to fetch weather data for this location. Please try again.');
+            setWeather(null);
+            setForecast(null);
+            setInsight(null);
+            setVideo(null);
         } finally {
             setLoading(false);
         }
@@ -87,26 +125,75 @@ export default function Home() {
                 <div className="max-w-4xl mx-auto w-full pt-6 space-y-6 animate-in slide-in-from-bottom-6 fade-in duration-700">
 
                     {insight && (
-                        <div className="bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-100 p-5 rounded-2xl flex items-start gap-4 shadow-sm animate-in fade-in duration-500">
-                            <div className="p-2 bg-indigo-100 rounded-full text-indigo-600">
-                                <Sparkles className="w-5 h-5" />
+                        <div className="bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-100 p-6 rounded-2xl shadow-sm animate-in fade-in duration-500">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-2 bg-indigo-100 rounded-full text-indigo-600">
+                                    <Sparkles className="w-5 h-5" />
+                                </div>
+                                <h4 className="font-bold text-indigo-900 text-lg">AI Daily Insight</h4>
                             </div>
-                            <div>
-                                <h4 className="font-bold text-indigo-900 mb-1">AI Daily Insight</h4>
-                                <p className="text-indigo-800 text-md">{insight}</p>
-                            </div>
+
+                            {typeof insight === 'string' ? (
+                                <p className="text-indigo-800 text-md pl-12">{insight}</p>
+                            ) : (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="bg-white/60 p-4 rounded-xl border border-indigo-50/50 hover:bg-white/80 transition-colors">
+                                        <p className="text-indigo-900 font-bold mb-1 flex items-center gap-2 text-sm"><Sparkles className="w-4 h-4 text-indigo-500"/> SUMMARY</p>
+                                        <p className="text-slate-700 text-sm leading-relaxed">{insight.summary}</p>
+                                    </div>
+                                    <div className="bg-white/60 p-4 rounded-xl border border-indigo-50/50 hover:bg-white/80 transition-colors">
+                                        <p className="text-indigo-900 font-bold mb-1 flex items-center gap-2 text-sm"><Shirt className="w-4 h-4 text-indigo-500"/> CLOTHING</p>
+                                        <p className="text-slate-700 text-sm leading-relaxed">{insight.clothing}</p>
+                                    </div>
+                                    <div className="bg-white/60 p-4 rounded-xl border border-indigo-50/50 hover:bg-white/80 transition-colors">
+                                        <p className="text-indigo-900 font-bold mb-1 flex items-center gap-2 text-sm"><Activity className="w-4 h-4 text-indigo-500"/> ACTIVITY</p>
+                                        <p className="text-slate-700 text-sm leading-relaxed">{insight.activity}</p>
+                                    </div>
+                                    <div className="bg-white/60 p-4 rounded-xl border border-indigo-50/50 hover:bg-white/80 transition-colors">
+                                        <p className="text-indigo-900 font-bold mb-1 flex items-center gap-2 text-sm"><Lightbulb className="w-4 h-4 text-yellow-500"/> HEADS-UP</p>
+                                        <p className="text-slate-700 text-sm leading-relaxed">{insight.heads_up}</p>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     )}
 
-                    <CurrentWeather data={weather} />
+                    <CurrentWeather 
+                        data={weather} 
+                        chanceOfRain={forecast.list[0]?.pop !== undefined ? Math.round(forecast.list[0].pop * 100) : 0} 
+                    />
                     <ForecastList data={forecast} />
 
                     <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
                         <h3 className="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
-                            📍 Location Map
+                            📍 Location Map <span className="text-sm font-medium text-slate-500 ml-auto bg-slate-100 px-3 py-1 rounded-full">Click anywhere to search</span>
                         </h3>
-                        <WeatherMap lat={weather.coord.lat} lon={weather.coord.lon} locationName={weather.name} />
+                        <WeatherMap lat={weather.coord.lat} lon={weather.coord.lon} locationName={weather.name} onMapClick={handleMapClick} />
                     </div>
+
+                    {video === 'not_found' ? (
+                        <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 animate-in fade-in slide-in-from-bottom-6 duration-700">
+                            <h3 className="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
+                                🎬 Explore {weather.name}
+                            </h3>
+                            <p className="text-slate-500 text-center py-6 bg-slate-50 rounded-2xl font-medium">Video not found for this location.</p>
+                        </div>
+                    ) : video && (
+                        <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 animate-in fade-in slide-in-from-bottom-6 duration-700">
+                            <h3 className="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
+                                🎬 Explore {weather.name}
+                            </h3>
+                            <div className="relative w-full overflow-hidden pt-[56.25%] rounded-2xl bg-slate-100 shadow-inner">
+                                <iframe 
+                                    className="absolute top-0 left-0 w-full h-full"
+                                    src={`https://www.youtube.com/embed/${video.id}?autoplay=0&rel=0&modestbranding=1`}
+                                    title={video.title}
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
+                            </div>
+                        </div>
+                    )}
                 </div>
             )}
 

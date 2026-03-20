@@ -1,11 +1,12 @@
 import type { WeatherData } from '../services/api';
-import { Droplets, Wind, Thermometer } from 'lucide-react';
+import { Droplets, Wind, Thermometer, Umbrella } from 'lucide-react';
 
 interface Props {
     data: WeatherData;
+    chanceOfRain?: number;
 }
 
-export default function CurrentWeather({ data }: Props) {
+export default function CurrentWeather({ data, chanceOfRain = 0 }: Props) {
     return (
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 w-full">
             <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-6">
@@ -40,13 +41,23 @@ export default function CurrentWeather({ data }: Props) {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-4 col-span-2">
+                    <div className="flex items-center gap-4">
                         <div className="p-3 bg-slate-200 rounded-full text-slate-600">
                             <Wind className="w-6 h-6" />
                         </div>
                         <div>
                             <p className="text-sm font-medium text-slate-500">Wind Speed</p>
                             <p className="font-bold text-lg text-slate-800">{data.wind.speed.toFixed(1)} m/s</p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                        <div className="p-3 bg-indigo-100 rounded-full text-indigo-600">
+                            <Umbrella className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <p className="text-sm font-medium text-slate-500">Chance of Rain</p>
+                            <p className="font-bold text-lg text-slate-800">{chanceOfRain}%</p>
                         </div>
                     </div>
                 </div>
