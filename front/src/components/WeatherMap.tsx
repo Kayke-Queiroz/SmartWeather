@@ -65,7 +65,7 @@ export default function WeatherMap({ lat, lon, locationName, onMapClick }: Weath
     }
 
     return (
-        <div className="w-full h-[400px] rounded-2xl overflow-hidden shadow-sm border border-slate-200 z-0 relative">
+        <div className="w-full h-[400px] rounded-2xl overflow-hidden shadow-lg border border-white/40 z-0 relative">
             <MapContainer
                 center={markerPos}
                 zoom={13}
@@ -79,8 +79,8 @@ export default function WeatherMap({ lat, lon, locationName, onMapClick }: Weath
                     className="map-tiles"
                 />
                 <MapEventsInner />
-                <Marker 
-                    position={markerPos} 
+                <Marker
+                    position={markerPos}
                     icon={customIcon}
                     draggable={true}
                     eventHandlers={eventHandlers}

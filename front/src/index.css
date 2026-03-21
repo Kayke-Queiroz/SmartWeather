@@ -5,6 +5,11 @@
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background-color: #f1f5f9;
+  background-image: url('https://images.unsplash.com/photo-1513002749550-c59d786b8e6c?q=80&w=2000&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   color: #0f172a;
   -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
 }

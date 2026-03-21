@@ -71,28 +71,28 @@ export default function SearchHistory({ refreshTrigger }: { refreshTrigger: numb
         URL.revokeObjectURL(url);
     };
 
-    if (loading && records.length === 0) return <div className="text-center py-8 text-slate-500 animate-pulse">Loading history...</div>;
+    if (loading && records.length === 0) return <div className="text-center py-8 text-white/80 animate-pulse font-medium drop-shadow-md">Loading history...</div>;
 
     if (records.length === 0) return null;
 
     return (
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 mt-12 w-full max-w-4xl mx-auto animate-in slide-in-from-bottom-8 fade-in">
+        <div className="bg-white/20 backdrop-blur-md p-6 rounded-3xl shadow-lg border border-white/40 mt-12 w-full max-w-4xl mx-auto animate-in slide-in-from-bottom-8 fade-in">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+                <h3 className="text-xl font-bold text-white flex items-center gap-2 drop-shadow-md">
                     🕒 Search History & Cloud Sync
                 </h3>
                 <div className="flex gap-2">
-                    <button onClick={exportToJSON} className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition-colors">
+                    <button onClick={exportToJSON} className="flex items-center gap-2 px-3 py-1.5 bg-white/30 hover:bg-white/40 text-white text-sm font-semibold rounded-xl transition-colors border border-white/30 shadow-sm">
                         <FileJson className="w-4 h-4" /> Export JSON
                     </button>
-                    <button onClick={exportToCSV} className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition-colors">
+                    <button onClick={exportToCSV} className="flex items-center gap-2 px-3 py-1.5 bg-white/30 hover:bg-white/40 text-white text-sm font-semibold rounded-xl transition-colors border border-white/30 shadow-sm">
                         <FileSpreadsheet className="w-4 h-4" /> Export CSV
                     </button>
                 </div>
             </div>
             <div className="space-y-3">
                 {records.map(record => (
-                    <div key={record.documentId} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 transition-colors rounded-2xl border border-slate-200 gap-4">
+                    <div key={record.documentId} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-white/10 hover:bg-white/20 transition-colors rounded-2xl border border-white/20 gap-4 shadow-sm">
 
                         <div className="flex-1">
                             {editingId === record.documentId ? (
@@ -101,33 +101,33 @@ export default function SearchHistory({ refreshTrigger }: { refreshTrigger: numb
                                         type="text"
                                         value={editValue}
                                         onChange={(e) => setEditValue(e.target.value)}
-                                        className="border border-blue-300 bg-white rounded-lg px-3 py-1 outline-none focus:ring-2 focus:ring-blue-500 font-bold text-lg w-full max-w-[200px]"
+                                        className="border border-white/50 bg-white/40 text-slate-900 rounded-lg px-3 py-1 outline-none focus:ring-2 focus:ring-blue-500 font-bold text-lg w-full max-w-[200px]"
                                         autoFocus
                                     />
                                     <button onClick={() => saveEdit(record.documentId)} className="text-green-600 hover:bg-green-100 p-1.5 rounded-md transition-colors"><Check className="w-5 h-5" /></button>
-                                    <button onClick={() => setEditingId(null)} className="text-slate-400 hover:bg-slate-200 p-1.5 rounded-md transition-colors"><X className="w-5 h-5" /></button>
+                                    <button onClick={() => setEditingId(null)} className="text-white/80 hover:bg-white/20 p-1.5 rounded-md transition-colors"><X className="w-5 h-5" /></button>
                                 </div>
                             ) : (
                                 <div className="flex items-center gap-3">
-                                    <p className="font-bold text-lg text-slate-800">{record.location}</p>
-                                    <button onClick={() => startEdit(record)} title="Rename Location" className="text-slate-400 hover:text-blue-500 transition-colors">
+                                    <p className="font-bold text-lg text-white drop-shadow-sm">{record.location}</p>
+                                    <button onClick={() => startEdit(record)} title="Rename Location" className="text-white/60 hover:text-white transition-colors">
                                         <Edit2 className="w-4 h-4" />
                                     </button>
                                 </div>
                             )}
-                            <p className="text-sm text-slate-500 mt-1">
+                            <p className="text-sm text-white/80 font-medium mt-1 drop-shadow-sm">
                                 {record.weatherData?.main?.temp ? `${Math.round(record.weatherData.main.temp)}°C` : 'N/A'} • {format(new Date(record.createdAt), "MMM d, yyyy 'at' h:mm a")}
                             </p>
                         </div>
 
                         <div className="flex items-center gap-4 text-sm font-medium w-full sm:w-auto justify-between sm:justify-end">
-                            <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full flex items-center gap-1">
-                                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                            <span className="px-3 py-1 bg-green-400/80 backdrop-blur-sm text-white rounded-full flex items-center gap-2 border border-green-300 shadow-sm">
+                                <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
                                 Strapi Synced
                             </span>
                             <button
                                 onClick={() => handleDelete(record.documentId)}
-                                className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+                                className="p-2 text-red-500 hover:bg-red-500/20 hover:text-red-600 rounded-xl transition-colors"
                                 title="Delete Record"
                             >
                                 <Trash2 className="w-5 h-5" />

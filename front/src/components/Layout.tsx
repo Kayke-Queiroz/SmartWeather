@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { CloudRain } from 'lucide-react';
 
 export default function Layout({ children }: { children: ReactNode }) {
     return (
-        <div className="min-h-screen flex flex-col pt-16 bg-slate-50">
-            <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-slate-200 z-50">
+        <div className="min-h-screen flex flex-col pt-16 bg-transparent">
+            <header className="fixed top-0 left-0 right-0 bg-white/70 backdrop-blur-lg border-b border-white/20 z-50">
                 <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="p-2 bg-blue-100 rounded-lg">
@@ -18,11 +18,11 @@ export default function Layout({ children }: { children: ReactNode }) {
                 </div>
             </header>
 
-            <main className="flex-1 w-full max-w-5xl mx-auto px-4 py-8">
+            <main className="flex-1 w-full max-w-5xl mx-auto px-4 py-8 relative z-10">
                 {children}
             </main>
 
-            <footer className="bg-white border-t border-slate-200 py-8 mt-auto">
+            <footer className="bg-white/10 backdrop-blur-md border-t border-white/20 py-8 mt-auto relative z-10">
                 <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-slate-500">
                     <div className="text-center md:text-left max-w-xl">
                         <h4 className="font-bold text-slate-800 text-base mb-1.5">Product Manager Accelerator</h4>
