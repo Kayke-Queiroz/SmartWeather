@@ -51,6 +51,7 @@ Return EXACTLY this JSON format:
         }
 
         return "🤖 AI Offline: A Hugging Face não devolveu um texto legível.";
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
         console.warn("Hugging Face API falhou:", err);
         return `🤖 AI Offline: Erro na Hugging Face. (${err.message})`;

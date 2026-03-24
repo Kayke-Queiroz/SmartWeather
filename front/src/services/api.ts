@@ -7,7 +7,7 @@ export interface WeatherData {
     name: string;
     sys: { country: string };
     main: { temp: number; feels_like: number; humidity: number; pressure: number; temp_min: number; temp_max: number };
-    weather: [{ main: string; description: string; icon: string }];
+    weather: [{ id: number; main: string; description: string; icon: string }];
     wind: { speed: number };
     coord: { lat: number; lon: number };
 }
@@ -17,7 +17,7 @@ export interface ForecastData {
     list: Array<{
         dt: number;
         main: { temp: number; temp_min: number; temp_max: number; humidity: number };
-        weather: [{ main: string; description: string; icon: string }];
+        weather: [{ id: number; main: string; description: string; icon: string }];
         wind: { speed: number };
         dt_txt: string;
         pop: number;
@@ -28,7 +28,7 @@ export interface ForecastData {
 
 export const weatherApi = {
     async getCurrentWeather(query: string | { lat: number; lon: number }): Promise<WeatherData> {
-        const params: any = { appid: OPENWEATHER_API_KEY, units: 'metric' };
+        const params: Record<string, string | number> = { appid: OPENWEATHER_API_KEY, units: 'metric' };
         if (typeof query === 'string') {
             params.q = query;
         } else {
@@ -40,7 +40,7 @@ export const weatherApi = {
     },
 
     async getForecast(query: string | { lat: number; lon: number }): Promise<ForecastData> {
-        const params: any = { appid: OPENWEATHER_API_KEY, units: 'metric' };
+        const params: Record<string, string | number> = { appid: OPENWEATHER_API_KEY, units: 'metric' };
         if (typeof query === 'string') {
             params.q = query;
         } else {

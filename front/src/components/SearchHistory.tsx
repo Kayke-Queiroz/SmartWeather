@@ -18,6 +18,7 @@ export default function SearchHistory({ refreshTrigger }: { refreshTrigger: numb
     };
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         loadRecords();
     }, [refreshTrigger]);
 
@@ -50,13 +51,15 @@ export default function SearchHistory({ refreshTrigger }: { refreshTrigger: numb
     };
 
     const exportToCSV = () => {
-        const headers = ['ID', 'Location', 'Latitude', 'Longitude', 'Date', 'Temperature (C)', 'Condition'];
+        const headers = ['ID', 'Location', 'Latitude', 'Longitude', 'CreatedAt', 'StartDate', 'EndDate', 'Temperature (C)', 'Condition'];
         const rows = records.map(r => [
             r.documentId,
             `"${r.location}"`,
             r.latitude,
             r.longitude,
             `"${r.createdAt}"`,
+            `"${r.startDate || ''}"`,
+            `"${r.endDate || ''}"`,
             r.weatherData?.main?.temp || '',
             `"${r.weatherData?.weather?.[0]?.description || ''}"`
         ]);
@@ -115,8 +118,18 @@ export default function SearchHistory({ refreshTrigger }: { refreshTrigger: numb
                                     </button>
                                 </div>
                             )}
-                            <p className="text-sm text-white/80 font-medium mt-1 drop-shadow-sm">
-                                {record.weatherData?.main?.temp ? `${Math.round(record.weatherData.main.temp)}°C` : 'N/A'} • {format(new Date(record.createdAt), "MMM d, yyyy 'at' h:mm a")}
+                            <p className="text-sm text-white/80 font-medium mt-1 drop-shadow-sm flex items-center gap-2 flex-wrap">
+                                <span>{record.weatherData?.main?.temp ? `${Math.round(record.weatherData.main.temp)}°C` : 'N/A'}</span>
+                                <span>•</span>
+                                <span>{format(new Date(record.createdAt), "MMM d, yyyy 'at' h:mm a")}</span>
+                                {(record.startDate && record.endDate) && (
+                                    <>
+                                        <span className="hidden sm:inline">•</span>
+                                        <span className="bg-blue-500/20 px-2 py-0.5 rounded-md text-xs border border-blue-400/30">
+                                            {format(new Date(record.startDate), "MMM d")} - {format(new Date(record.endDate), "MMM d, yyyy")}
+                                        </span>
+                                    </>
+                                )}
                             </p>
                         </div>
 

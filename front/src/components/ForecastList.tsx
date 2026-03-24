@@ -2,6 +2,7 @@ import type { ForecastData } from '../services/api';
 import { format } from 'date-fns';
 import { Umbrella } from 'lucide-react';
 import { motion } from 'framer-motion';
+import WeatherIcon from './WeatherIcon';
 
 interface Props {
     data: ForecastData;
@@ -53,12 +54,8 @@ export default function ForecastList({ data }: Props) {
                     >
                         <p className="font-bold text-slate-800">{format(new Date(day.dt * 1000), 'EEE')}</p>
                         <p className="text-xs text-slate-600 font-semibold mb-2">{format(new Date(day.dt * 1000), 'MMM d')}</p>
-                        <div className="p-2 bg-white/60 rounded-full shadow-sm my-2">
-                            <img
-                                src={`https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`}
-                                alt={day.weather[0].description}
-                                className="w-12 h-12"
-                            />
+                        <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl shadow-inner my-2 border border-white/30 truncate">
+                            <WeatherIcon main={day.weather[0].main} className="w-10 h-10" />
                         </div>
                         <p className="font-extrabold text-xl mt-1 text-slate-800">{Math.round(day.main.temp)}°</p>
                         <div className="flex gap-2 text-xs mt-1 font-bold">

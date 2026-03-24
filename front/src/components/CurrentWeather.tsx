@@ -1,6 +1,7 @@
 import type { WeatherData } from '../services/api';
 import { Droplets, Wind, Thermometer, Umbrella } from 'lucide-react';
 import { motion } from 'framer-motion';
+import WeatherIcon from './WeatherIcon';
 
 interface Props {
     data: WeatherData;
@@ -20,9 +21,12 @@ export default function CurrentWeather({ data, chanceOfRain = 0 }: Props) {
                     <h2 className="text-3xl font-bold flex items-center gap-3 text-white drop-shadow-md">
                         {data.name}, {data.sys.country}
                     </h2>
-                    <p className="text-white/90 capitalize mt-1 text-lg font-medium drop-shadow-sm">{data.weather[0]?.description || 'Clear'}</p>
-                    <div className="text-7xl font-extrabold text-white mt-4 tracking-tighter drop-shadow-lg">
+                    <p className="text-white/90 capitalize mt-1 text-lg font-medium drop-shadow-sm flex items-center gap-2">
+                        {data.weather[0]?.description || 'Clear'}
+                    </p>
+                    <div className="text-7xl font-extrabold text-white mt-4 tracking-tighter drop-shadow-lg flex items-center gap-6">
                         {Math.round(data.main.temp)}°
+                        <WeatherIcon main={data.weather[0]?.main || 'Clear'} className="w-20 h-20" />
                     </div>
                 </div>
 

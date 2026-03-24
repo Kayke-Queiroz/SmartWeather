@@ -11,21 +11,22 @@ export interface WeatherRecord {
     longitude: number;
     startDate: string;
     endDate: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     weatherData: any;
     createdAt: string;
 }
 
 export const strapiApi = {
     // CREATE
-    async saveRecord(location: string, data: WeatherData) {
+    async saveRecord(location: string, data: WeatherData, startDate?: string, endDate?: string) {
         try {
             const payload = {
                 data: {
                     location,
                     latitude: data.coord.lat,
                     longitude: data.coord.lon,
-                    startDate: new Date().toISOString(),
-                    endDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+                    startDate: startDate ? new Date(startDate).toISOString() : new Date().toISOString(),
+                    endDate: endDate ? new Date(endDate).toISOString() : new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
                     weatherData: data,
                 }
             };
