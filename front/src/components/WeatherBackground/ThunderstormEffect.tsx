@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import RainEffect from './RainEffect';
 
-export default function ThunderstormEffect() {
+export default function ThunderstormEffect({ isHeavy = false }: { isHeavy?: boolean }) {
     const [flash, setFlash] = useState(false);
 
     useEffect(() => {
@@ -24,7 +24,7 @@ export default function ThunderstormEffect() {
 
     return (
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <RainEffect />
+            <RainEffect isHeavy={isHeavy} />
             <div 
                 className={`absolute inset-0 bg-white transition-opacity duration-75 ${flash ? 'opacity-40' : 'opacity-0'}`}
             ></div>

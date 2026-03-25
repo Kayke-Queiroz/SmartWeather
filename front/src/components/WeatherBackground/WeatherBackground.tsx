@@ -31,11 +31,12 @@ export default function WeatherBackground({ weatherMain, weatherDescription, tem
         const rainKeywords  = ['rain', 'drizzle', 'shower', 'precipit', 'sprinkle'];
         const fogKeywords   = ['fog', 'mist', 'haze', 'smoke', 'dust', 'ash', 'sand'];
 
-        if (stormKeywords.some(kw => combined.includes(kw))) return <ThunderstormEffect />;
+        const isHeavy = ['heavy', 'extreme', 'violent', 'torrent'].some(kw => combined.includes(kw));
+
+        if (stormKeywords.some(kw => combined.includes(kw))) return <ThunderstormEffect isHeavy={isHeavy} />;
         if (snowKeywords.some(kw => combined.includes(kw)))  return <SnowEffect />;
         if (rainKeywords.some(kw => combined.includes(kw))) {
-            const isHeavy = ['heavy', 'extreme', 'violent', 'torrent'].some(kw => combined.includes(kw));
-            return <RainEffect isHeavy={isHeavy} />;
+            return isHeavy ? <ThunderstormEffect isHeavy={true} /> : <RainEffect isHeavy={false} />;
         }
         if (fogKeywords.some(kw => combined.includes(kw))) return <CloudsEffect />;
 
