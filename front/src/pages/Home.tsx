@@ -78,7 +78,7 @@ export default function Home() {
             generateWeatherInsight(weatherData).then(aiTip => setInsight(aiTip));
             youtubeApi.getVideoForLocation(weatherData.name).then(v => setVideo(v || 'not_found'));
 
-            strapiApi.saveRecord(weatherData.name, weatherData, startDate, endDate).then(() => {
+            strapiApi.saveRecord(weatherData.name, weatherData, finalForecast, startDate, endDate).then(() => {
                 setRefreshHistory(prev => prev + 1);
             });
 
@@ -127,7 +127,7 @@ export default function Home() {
             generateWeatherInsight(weatherData).then(aiTip => setInsight(aiTip));
             youtubeApi.getVideoForLocation(weatherData.name).then(v => setVideo(v || 'not_found'));
 
-            strapiApi.saveRecord(weatherData.name, weatherData, startDate, endDate).then(() => {
+            strapiApi.saveRecord(weatherData.name, weatherData, finalForecast, startDate, endDate).then(() => {
                 setRefreshHistory(prev => prev + 1);
             });
 

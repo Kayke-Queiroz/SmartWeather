@@ -13,6 +13,7 @@ export interface WeatherRecord {
     endDate: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     weatherData: any;
+    forecastData?: any;
     createdAt: string;
 }
 
@@ -27,7 +28,7 @@ export const strapiApi = {
     },
 
     // CREATE
-    async saveRecord(location: string, data: WeatherData, startDate?: string, endDate?: string) {
+    async saveRecord(location: string, data: WeatherData, forecast: any, startDate?: string, endDate?: string) {
         try {
             const payload = {
                 data: {
@@ -36,7 +37,10 @@ export const strapiApi = {
                     longitude: data.coord.lon,
                     startDate: startDate ? new Date(startDate).toISOString() : new Date().toISOString(),
                     endDate: endDate ? new Date(endDate).toISOString() : new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
-                    weatherData: data,
+                    weatherData: {
+                        ...data,
+                        forecast: forecast
+                    },
                 }
             };
             const res = await axios.post(`${STRAPI_URL}/weather-records`, payload);

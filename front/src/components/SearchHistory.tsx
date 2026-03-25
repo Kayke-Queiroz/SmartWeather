@@ -51,18 +51,43 @@ export default function SearchHistory({ refreshTrigger }: { refreshTrigger: numb
     };
 
     const exportToCSV = () => {
-        const headers = ['ID', 'Location', 'Latitude', 'Longitude', 'CreatedAt', 'StartDate', 'EndDate', 'Temperature (C)', 'Condition'];
-        const rows = records.map(r => [
-            r.documentId,
-            `"${r.location}"`,
-            r.latitude,
-            r.longitude,
-            `"${r.createdAt}"`,
-            `"${r.startDate || ''}"`,
-            `"${r.endDate || ''}"`,
-            r.weatherData?.main?.temp || '',
-            `"${r.weatherData?.weather?.[0]?.description || ''}"`
-        ]);
+        const headers = [
+            'ID', 'Location', 'Latitude', 'Longitude', 'CreatedAt', 'StartDate', 'EndDate', 
+            'Current Temp (C)', 'Condition',
+            'Day 1 Temp', 'Day 2 Temp', 'Day 3 Temp', 'Day 4 Temp', 'Day 5 Temp'
+        ];
+
+        const rows = records.map(r => {
+            const forecastList = r.weatherData?.forecast?.list || [];
+            
+            // Basic grouping by day to get representative temperatures
+            const dailyTemps: string[] = [];
+            const seenDates = new Set();
+            
+            forecastList.forEach((item: any) => {
+                const date = item.dt_txt.split(' ')[0];
+                if (!seenDates.has(date) && dailyTemps.length < 5) {
+                    seenDates.add(date);
+                    dailyTemps.push(`${Math.round(item.main.temp)}°C`);
+                }
+            });
+
+            // Ensure we always have 5 columns for forecast
+            while (dailyTemps.length < 5) dailyTemps.push('');
+
+            return [
+                r.documentId,
+                `"${r.location}"`,
+                r.latitude,
+                r.longitude,
+                `"${r.createdAt}"`,
+                `"${r.startDate || ''}"`,
+                `"${r.endDate || ''}"`,
+                r.weatherData?.main?.temp || '',
+                `"${r.weatherData?.weather?.[0]?.description || ''}"`,
+                ...dailyTemps
+            ];
+        });
 
         const csvContent = [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });

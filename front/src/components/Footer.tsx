@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 export default function Footer() {
     return (
-        <motion.footer 
+        <motion.footer
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="w-full mt-auto py-8 px-4 border-t border-white/20 bg-black/10 backdrop-blur-md text-white/80"
@@ -19,9 +19,9 @@ export default function Footer() {
                         A premier community and program designed to help professionals transition into and accelerate their careers in product management and AI-engineering through hands-on experience and expert mentorship.
                     </p>
                     <div className="flex items-center gap-4 pt-2">
-                        <a 
-                            href="https://www.linkedin.com/company/product-management-accelerator/" 
-                            target="_blank" 
+                        <a
+                            href="https://www.linkedin.com/company/product-management-accelerator/"
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold"
                         >
@@ -37,9 +37,9 @@ export default function Footer() {
                         <p className="text-xs text-white/50">{new Date().getFullYear()} • Kayke Queiroz dos Santos</p>
                     </div>
                     <div className="flex md:justify-end gap-4 pt-4">
-                        <a 
-                            href="https://github.com/Kayke-Queiroz" 
-                            target="_blank" 
+                        <a
+                            href="https://github.com/Kayke-Queiroz"
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-all border border-white/10"
                             title="GitHub Profile"
