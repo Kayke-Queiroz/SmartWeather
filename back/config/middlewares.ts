@@ -9,11 +9,12 @@ const config: Core.Config.Middlewares = [
     config: {
       enabled: true,
       headers: '*',
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
       origin: [
         'http://localhost:5173',
         'http://localhost:5174',
+        'https://smart-weather-sigma.vercel.app',
         /\.vercel\.app$/,
-        'https://smart-weather-sigma.vercel.app/',
       ],
     },
   },
