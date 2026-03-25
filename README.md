@@ -1,35 +1,35 @@
-# 🌤️ SmartWeather — Full Stack AI Engineer Assessment
+#  SmartWeather — Full Stack AI Engineer Assessment
 
 SmartWeather is a premium, full-stack weather intelligence platform. It provides real-time weather data, dynamic glassmorphism animations, AI-powered health/activity insights, and immersive 4K drone tours of searched locations.
 
-**🚀 Live Demo:** [https://smart-weather-sigma.vercel.app/](https://smart-weather-sigma.vercel.app/)
+** Live Demo:** [https://smart-weather-sigma.vercel.app/](https://smart-weather-sigma.vercel.app/)
 
 ---
 
-## 👨‍💻 Candidate Information
+##  Candidate Information
 *   **Name:** Kayke Queiroz dos Santos
 *   **Assessment:** AI Engineer Intern Technical Assessment
 *   **Organization:** [PM Accelerator](https://www.linkedin.com/company/product-management-accelerator/)
 
 ---
 
-## 🏗️ Architecture & Infrastructure
+##  Architecture & Infrastructure
 
 The project follows a modern decoupled architecture:
 
-### 🌐 Frontend (Vercel)
+###  Frontend (Vercel)
 *   **Framework:** React 19 + Vite (TypeScript)
 *   **Styling:** Tailwind CSS 4 + Framer Motion (Glassmorphism design)
 *   **Mapping:** React Leaflet (Interactive OpenStreetMap)
 *   **State & API:** Axios + modular service layer for clean API management.
 
-### 🔌 Backend (Strapi Cloud)
+###  Backend (Strapi Cloud)
 *   **Headless CMS:** Strapi 5 (latest stable version)
 *   **Database:** SQLite (efficient for the assessment scope)
 *   **Deployment:** Strapi Cloud for high-availability RESTful API.
 *   **Features:** Full CRUD operations for weather records and search history.
 
-### 🧠 Integrated AI & External APIs
+###  Integrated AI & External APIs
 1.  **OpenWeather API:** Real-time metrics and 5-day forecasts.
 2.  **Hugging Face Inference API (Qwen 2.5-72B):** Generates specialized AI insights (Clothing, Activity, Safety Warnings).
 3.  **YouTube Data API v3:** Fetches cinematic 4K drone tours based on location name.
@@ -37,7 +37,7 @@ The project follows a modern decoupled architecture:
 
 ---
 
-## ✨ Features (Assessment Requirements)
+##  Features (Assessment Requirements)
 
 ### Tech Assessment #1 (Frontend)
 *   **Omni-Search:** Support for Cities, Zip Codes, GPS, and Landmarks.
@@ -54,7 +54,7 @@ The project follows a modern decoupled architecture:
 
 ---
 
-## 🛠️ Local Setup
+##  Local Setup
 
 ### 1. Prerequisites
 *   Node.js v20+
@@ -84,8 +84,8 @@ npm run dev
 
 ---
 
-## 📄 PM Accelerator Description
+##  PM Accelerator Description
 *Product Manager Accelerator is a premier community and program designed to help professionals transition into and accelerate their careers in product management and AI-engineering through hands-on experience and expert mentorship.*
 
 ---
-**Built with ❤️ for the PM Accelerator Assessment.**
+
