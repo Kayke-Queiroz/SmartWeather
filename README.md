@@ -1,146 +1,91 @@
-# SmartWeather 🌤️
+# 🌤️ SmartWeather — Full Stack AI Engineer Assessment
 
-> **AI Engineer Intern Assessment** — Candidate: **Kayke Queiroz dos Santos**
+SmartWeather is a premium, full-stack weather intelligence platform. It provides real-time weather data, dynamic glassmorphism animations, AI-powered health/activity insights, and immersive 4K drone tours of searched locations.
 
-A full-stack weather application with real-time conditions, AI-powered insights, dynamic weather animations, interactive maps, and YouTube location videos — backed by a cloud database with full CRUD and data export.
-
----
-
-## 🌐 Live Demo
-
-**Frontend (Vercel):** https://smart-weather-sigma.vercel.app
-**Backend API (Strapi Cloud):** https://attractive-crown-bc8583a2b3.strapiapp.com
+**🚀 Live Demo:** [https://smart-weather-sigma.vercel.app/](https://smart-weather-sigma.vercel.app/)
 
 ---
 
-## ✨ Features
-
-### Frontend (Tech Assessment #1)
-- 🔍 **Search** by city name, zip code, GPS coordinates, or landmarks
-- 📍 **Current Location** detection via browser Geolocation API
-- 🌡️ **Current Weather** — temperature, feels like, humidity, wind speed, rain chance
-- 📅 **5-Day Forecast** with optional date range filter
-- 🤖 **AI Insights** via Hugging Face (Qwen 2.5-72B) — clothing tips, activity suggestions, safety warnings
-- 🗺️ **Interactive Map** via React Leaflet — click anywhere to search that location
-- 🎬 **YouTube Videos** — cinematic drone tours of the searched city
-- 🌩️ **Dynamic Backgrounds** — animated weather effects (rain, snow, storm, fog, clear...)
-- ❌ **Error Handling** — graceful messages for invalid cities or API failures
-- 📱 **Fully Responsive** — desktop, tablet, and mobile
-
-### Backend (Tech Assessment #2)
-- 💾 **Database** — SQLite (local) / Strapi Cloud (production) via Strapi 5 Headless CMS
-- ✅ **Full CRUD** — Create, Read, Update, Delete weather search records
-- 🗓️ **Date Range** input with validation (start must precede end)
-- 📤 **Export to JSON** and **CSV** directly from the browser
-- 🔗 **RESTful API** — Strapi auto-generates REST endpoints for `weather-record`
+## 👨‍💻 Candidate Information
+*   **Name:** Kayke Queiroz dos Santos
+*   **Assessment:** AI Engineer Intern Technical Assessment
+*   **Organization:** [PM Accelerator](https://www.linkedin.com/company/product-management-accelerator/)
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Architecture & Infrastructure
 
-```
-SmartWeather/
-├── front/                  # React 19 + Vite (deployed on Vercel)
-│   └── src/
-│       ├── components/     # UI components (CurrentWeather, ForecastList, WeatherMap, etc.)
-│       ├── pages/          # Home page (main app logic)
-│       └── services/       # API layer
-│           ├── api.ts          → OpenWeather API
-│           ├── strapiApi.ts    → Strapi REST (CRUD)
-│           ├── aiApi.ts        → Hugging Face AI
-│           └── youtubeApi.ts   → YouTube Data API v3
-│
-└── back/                   # Strapi 5 Headless CMS (deployed on Strapi Cloud)
-    └── src/api/
-        └── weather-record/ # Content type with schema, routes, controller, service
-```
+The project follows a modern decoupled architecture:
 
-**Data flow:** User searches → OpenWeather API → weather displayed → Strapi saves record → HuggingFace generates AI insight → YouTube fetches location video.
+### 🌐 Frontend (Vercel)
+*   **Framework:** React 19 + Vite (TypeScript)
+*   **Styling:** Tailwind CSS 4 + Framer Motion (Glassmorphism design)
+*   **Mapping:** React Leaflet (Interactive OpenStreetMap)
+*   **State & API:** Axios + modular service layer for clean API management.
 
----
+### 🔌 Backend (Strapi Cloud)
+*   **Headless CMS:** Strapi 5 (latest stable version)
+*   **Database:** SQLite (efficient for the assessment scope)
+*   **Deployment:** Strapi Cloud for high-availability RESTful API.
+*   **Features:** Full CRUD operations for weather records and search history.
 
-## 🔑 APIs Used
-
-| API | Purpose |
-|---|---|
-| [OpenWeather](https://openweathermap.org/api) | Current weather + 5-day forecast |
-| [Hugging Face](https://huggingface.co/inference-api) | AI-generated weather insights |
-| [YouTube Data API v3](https://developers.google.com/youtube/v3) | Location cinematic videos |
-| [Strapi 5](https://strapi.io) | Backend CMS / REST API / database |
-| [React Leaflet / OpenStreetMap](https://leafletjs.com) | Interactive map |
+### 🧠 Integrated AI & External APIs
+1.  **OpenWeather API:** Real-time metrics and 5-day forecasts.
+2.  **Hugging Face Inference API (Qwen 2.5-72B):** Generates specialized AI insights (Clothing, Activity, Safety Warnings).
+3.  **YouTube Data API v3:** Fetches cinematic 4K drone tours based on location name.
+4.  **Geolocation API:** Seamless "Current Location" weather retrieval.
 
 ---
 
-## ☁️ Deployment
+## ✨ Features (Assessment Requirements)
 
-The app uses a two-service cloud architecture:
+### Tech Assessment #1 (Frontend)
+*   **Omni-Search:** Support for Cities, Zip Codes, GPS, and Landmarks.
+*   **Responsive UI:** Seamless experience across desktop, tablet, and mobile.
+*   **Rich Visuals:** Dynamic background animations that react to specific weather IDs (Rain, Snow, Thunderstorm, Clear).
+*   **Error Management:** Graceful handling of invalid locations or API timeouts.
 
-| Layer | Platform | Notes |
-|---|---|---|
-| Frontend | **Vercel** | Auto-deploys from `main` branch |
-| Backend | **Strapi Cloud** | Connected to the same GitHub repo (`/back`) |
+### Tech Assessment #2 (Backend - CRUD)
+*   **CREATE:** Save location, date ranges, and weather snapshots to the cloud.
+*   **READ:** Real-time retrieval of search history with shared access.
+*   **UPDATE:** Ability to rename/alias locations in the database.
+*   **DELETE:** Full control to remove historical records.
+*   **DATA EXPORT:** One-click export of history to **JSON** or **CSV**.
 
-### Environment Variables
+---
 
-**Vercel (frontend):**
+## 🛠️ Local Setup
+
+### 1. Prerequisites
+*   Node.js v20+
+*   NPM or Yarn
+
+### 2. Environment Variables
+Create a `front/.env` file with your credentials:
 ```env
-VITE_OPENWEATHER_API_KEY=your_key
-VITE_HUGGINGFACE_API_KEY=your_key
-VITE_YOUTUBE_API_KEY=your_key
+VITE_OPENWEATHER_API_KEY=xxx
+VITE_HUGGINGFACE_API_KEY=xxx
+VITE_YOUTUBE_API_KEY=xxx
 VITE_STRAPI_URL=https://attractive-crown-bc8583a2b3.strapiapp.com
 ```
 
-**Strapi Cloud (backend):** Configured in the Strapi Cloud dashboard — same secrets as the local `.env`.
-
-> **Important:** After deploying the backend, go to Strapi Admin → **Settings → Roles → Public** and enable `find`, `findOne`, `create`, `update`, `delete` for the `weather-record` content type.
-
----
-
-## 🚀 Running Locally
-
-### Prerequisites
-- Node.js v20+
-- npm
-
-### 1. Clone
+### 3. Installation
 ```bash
-git clone https://github.com/Kayke-Queiroz/SmartWeather.git
-cd SmartWeather
-```
-
-### 2. Backend (Strapi)
-```bash
+# Backend setup (optional if using live Cloud URL)
 cd back
 npm install
 npm run develop
-```
-Strapi admin panel: http://localhost:1337/admin
 
-### 3. Frontend (React)
-```bash
+# Frontend setup
 cd front
 npm install
-```
-
-Create `front/.env`:
-```env
-VITE_OPENWEATHER_API_KEY=your_openweather_key
-VITE_HUGGINGFACE_API_KEY=your_huggingface_key
-VITE_YOUTUBE_API_KEY=your_youtube_key
-VITE_STRAPI_URL=http://localhost:1337
-```
-
-```bash
 npm run dev
 ```
-App runs at: http://localhost:5173
 
 ---
 
-## 🧑‍💻 About
+## 📄 PM Accelerator Description
+*Product Manager Accelerator is a premier community and program designed to help professionals transition into and accelerate their careers in product management and AI-engineering through hands-on experience and expert mentorship.*
 
-Built by **Kayke Queiroz dos Santos** as part of the **Product Manager Accelerator** AI Engineer Intern Technical Assessment.
-
-**Product Manager Accelerator** — A premier community and program designed to help professionals transition into and accelerate their careers in product management and AI-engineering through hands-on experience and expert mentorship.
-
-🔗 [PM Accelerator on LinkedIn](https://www.linkedin.com/company/product-manager-accelerator/)
+---
+**Built with ❤️ for the PM Accelerator Assessment.**
