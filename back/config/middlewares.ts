@@ -14,7 +14,6 @@ const config: Core.Config.Middlewares = [
         'http://localhost:5173',
         'http://localhost:5174',
         'https://smart-weather-sigma.vercel.app',
-        'https://attractive-crown-bc8583a2b3.strapiapp.com',
         /\.vercel\.app$/,
       ],
     },

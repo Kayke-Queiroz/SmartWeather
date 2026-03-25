@@ -30,7 +30,15 @@ export default function Layout({ children }: { children: ReactNode }) {
                     </div>
                     <div className="text-center md:text-right shrink-0">
                         <p className="font-medium text-slate-800">AI Engineer Intern Assessment</p>
-                        <p className="mt-1 font-semibold text-blue-600 text-lg">Candidate: Kayke</p>
+                        <p className="mt-1 font-semibold text-blue-600 text-lg">Candidate: Kayke Queiroz dos Santos</p>
+                        <a
+                            href="https://www.linkedin.com/company/product-manager-accelerator/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block mt-2 text-xs text-blue-500 hover:text-blue-700 underline underline-offset-2 transition-colors"
+                        >
+                            PM Accelerator on LinkedIn ↗
+                        </a>
                     </div>
                 </div>
             </footer>
