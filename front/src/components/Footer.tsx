@@ -5,7 +5,7 @@ export default function Footer() {
         <motion.footer
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="w-full mt-auto py-8 px-4 border-t border-white/20 bg-black/10 backdrop-blur-md text-white/80"
+            className="w-full mt-auto py-8 px-4 border-t border-white/20 bg-black/10 backdrop-blur-md text-white/80 relative z-10"
         >
             <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-8">
                 <div className="flex-1 space-y-4">
