@@ -1,25 +1,39 @@
-# 🌤️ SmartWeather — Full Stack AI Weather Intelligence
+#  SmartWeather — Full Stack AI Weather Intelligence
 
 SmartWeather is a premium, full-stack weather intelligence platform that blends high-performance engineering with immersive visuals. It provides real-time weather data, AI-powered health/activity insights, and cinematic 4K drone tours, all wrapped in a stunning glassmorphism interface.
 
-> **🚀 Deployment Status:**
-> - **Frontend:** Deployed on [Vercel](https://smart-weather-sigma.vercel.app/)
-> - **Backend:** Deployed on [Strapi Cloud](https://sua-url.strapiapp.com)
+ **Live Demo:** [https://smart-weather-sigma.vercel.app/](https://smart-weather-sigma.vercel.app/)
+
+---
+
+##  Features
+
+- **Real-time weather data** (OpenWeather API)
+- **5-day forecast visualization**
+- **AI-powered health & activity insights**
+- **Dynamic weather-based animations**
+- **Interactive map** with location visualization
+- **Full CRUD weather history**
+- **Data export** (JSON, CSV)
+- **YouTube 4K location tours**
 
 ---
 
 ## 📸 Screenshots
 
 <div align="center">
-  <img src="./screenshots/dashboard.png" alt="SmartWeather Dashboard" width="800px" />
-  <p><i>The main dashboard featuring real-time weather, search, and date range selection in a sleek glassmorphism UI.</i></p>
+  <img src="./screenshots/q.jpg" alt="SmartWeather Dashboard" width="24%" />
+  <img src="./screenshots/u.jpg" alt="SmartWeather Dashboard" width="24%" />
+  <img src="./screenshots/w.jpg" alt="SmartWeather Dashboard" width="24%" />
+  <img src="./screenshots/x.jpg" alt="SmartWeather Dashboard" width="24%" />
+  <p><i>A premium glassmorphism interface with real-time weather, search history, and AI-powered insights.</i></p>
 </div>
 
 *(Tip: Search for 'London' to see the dynamic rain effects or 'Natal, BR' for clear skies!)*
 
 ---
 
-## ⚙️ Tech Stack
+##  Tech Stack
 
 | Area | Technologies |
 | :--- | :--- |
@@ -27,11 +41,10 @@ SmartWeather is a premium, full-stack weather intelligence platform that blends 
 | **Backend** | Strapi 5 (Headless CMS), SQLite |
 | **AI Layer** | Hugging Face Inference API (Qwen 2.5-72B), YouTube Data API v3 |
 | **Mapping** | React Leaflet (OpenStreetMap) |
-| **Infrastructure** | Vercel (Frontend), Strapi Cloud (Backend) |
 
 ---
 
-## 🔄 Application Flow
+##  Application Flow
 
 The system orchestrates multiple APIs and a headless CMS to deliver a seamless experience:
 
@@ -41,7 +54,7 @@ graph TD
     B -->|Current Data| C[Frontend UI]
     B -->|Coordinates| D[YouTube Data API]
     B -->|Weather ID| E[Dynamic Animations]
-    C -->|Auto-save| F[Strapi Cloud CMS]
+    C -->|Auto-save| F[Strapi Backend CMS]
     F -->|Historical Data| G[Search History Page]
     B -->|Context| H[Hugging Face AI]
     H -->|Insights| C
@@ -51,11 +64,11 @@ graph TD
 1. **Search**: User inputs a city, zip code, or landmark.
 2. **Intelligence**: System fetches weather then triggers AI for personalized health/activity insights.
 3. **Immersive UI**: The background morphs based on the specific Weather ID, while YouTube fetches a cinematic tour.
-4. **Persistence**: Every search is automatically saved to Strapi Cloud for history and analysis.
+4. **Persistence**: Every search is automatically saved to the Strapi backend for history and analysis.
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```text
 SmartWeather/
@@ -75,7 +88,7 @@ SmartWeather/
 
 ---
 
-## 🌧️ Dynamic Animations
+##  Dynamic Animations
 
 One of the project's key differentiators is its **weather-reactive background system**. Instead of simple static images, we use a combination of **Framer Motion** and **CSS-based particle systems**:
 
@@ -86,7 +99,7 @@ One of the project's key differentiators is its **weather-reactive background sy
 
 ---
 
-## 🧠 Engineering Highlights
+##  Engineering Highlights
 
 - **Decoupled Full-Stack Architecture**: Clean separation between the React frontend and Strapi backend allows for independent scaling and maintenance.
 - **AI-Driven Personalization**: Leveraging **Qwen 2.5-72B** to provide non-generic health warnings and clothing suggestions based on humidity, temperature, and wind.
@@ -95,21 +108,37 @@ One of the project's key differentiators is its **weather-reactive background sy
 
 ---
 
-## 👨‍💻 Candidate Information
+##  Candidate Information
 *   **Name:** Kayke Queiroz dos Santos
 *   **Assessment:** AI Engineer Intern Technical Assessment
 *   **Organization:** [PM Accelerator](https://www.linkedin.com/company/product-management-accelerator/)
 
 ---
 
-## 🚀 Local Setup
+##  Deployment Architecture
+
+The application is architected for modern cloud deployment, ensuring high availability and separation of concerns:
+
+- **Frontend:** Hosted on **Vercel**, leveraging edge functions for fast global delivery.
+- **Backend:** Powered by **Strapi Cloud**, providing a robust headless CMS infrastructure.
+
+---
+
+##  Local Setup
 
 1. **Install Dependencies**:
    ```bash
    cd front && npm install
    cd ../back && npm install
    ```
-2. **Env Variables**: Add your API keys to `front/.env`.
+2. **Environment Variables**: 
+   Create a `.env` file in the `front/` directory and add your API keys:
+   ```env
+   VITE_OPENWEATHER_API_KEY=your_openweather_key
+   VITE_HUGGINGFACE_API_KEY=your_huggingface_key
+   VITE_YOUTUBE_API_KEY=your_youtube_key
+   VITE_STRAPI_URL=your_strapi_backend_url
+   ```
 3. **Run**:
    ```bash
    # Front

@@ -10,16 +10,24 @@ export default function SearchHistory({ refreshTrigger }: { refreshTrigger: numb
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editValue, setEditValue] = useState('');
 
-    const loadRecords = async () => {
+    const loadRecords = async (retryCount = 0) => {
         setLoading(true);
         const data = await strapiApi.getRecords();
+        
+        if ((!data || data.length === 0) && retryCount < 3) {
+            // If it fails or is empty on mount, it might be a cold start. Retry in 5s.
+            console.log(`History fetch failed or empty, retrying in 5s... (Attempt ${retryCount + 1})`);
+            setTimeout(() => loadRecords(retryCount + 1), 5000);
+            return;
+        }
+
         setRecords(data || []);
         setLoading(false);
     };
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         loadRecords();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [refreshTrigger]);
 
     const handleDelete = async (documentId: string) => {
