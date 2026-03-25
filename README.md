@@ -66,7 +66,7 @@ Create a `front/.env` file with your credentials:
 VITE_OPENWEATHER_API_KEY=xxx
 VITE_HUGGINGFACE_API_KEY=xxx
 VITE_YOUTUBE_API_KEY=xxx
-VITE_STRAPI_URL=https://attractive-crown-bc8583a2b3.strapiapp.com
+VITE_STRAPI_URL=xxx
 ```
 
 ### 3. Installation
