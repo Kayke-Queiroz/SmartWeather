@@ -134,10 +134,6 @@ export default function SearchHistory({ refreshTrigger }: { refreshTrigger: numb
                         </div>
 
                         <div className="flex items-center gap-4 text-sm font-medium w-full sm:w-auto justify-between sm:justify-end">
-                            <span className="px-3 py-1 bg-green-400/80 backdrop-blur-sm text-white rounded-full flex items-center gap-2 border border-green-300 shadow-sm">
-                                <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-                                Strapi Synced
-                            </span>
                             <button
                                 onClick={() => handleDelete(record.documentId)}
                                 className="p-2 text-red-500 hover:bg-red-500/20 hover:text-red-600 rounded-xl transition-colors"

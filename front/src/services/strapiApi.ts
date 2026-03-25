@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { WeatherData } from './api';
 
-const STRAPI_URL = 'http://localhost:1337/api';
+const STRAPI_URL = `${import.meta.env.VITE_STRAPI_URL || 'http://localhost:1337'}/api`;
 
 export interface WeatherRecord {
     id: number;
@@ -17,6 +17,15 @@ export interface WeatherRecord {
 }
 
 export const strapiApi = {
+    // WARMUP — fires once on app load to wake the Strapi Cloud instance
+    async warmup() {
+        try {
+            await axios.get(`${STRAPI_URL.replace('/api', '')}/_health`);
+        } catch {
+            // Ignore errors — this is best-effort only
+        }
+    },
+
     // CREATE
     async saveRecord(location: string, data: WeatherData, startDate?: string, endDate?: string) {
         try {
