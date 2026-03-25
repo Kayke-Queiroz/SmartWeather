@@ -1,4 +1,3 @@
-import { Linkedin, Github, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Footer() {
@@ -18,16 +17,6 @@ export default function Footer() {
                     <p className="text-sm leading-relaxed max-w-md text-white/70">
                         A premier community and program designed to help professionals transition into and accelerate their careers in product management and AI-engineering through hands-on experience and expert mentorship.
                     </p>
-                    <div className="flex items-center gap-4 pt-2">
-                        <a
-                            href="https://www.linkedin.com/company/product-management-accelerator/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-white transition-colors flex items-center gap-1.5 text-xs font-semibold"
-                        >
-                            <Linkedin className="w-4 h-4" /> LinkedIn <ExternalLink className="w-3 h-3" />
-                        </a>
-                    </div>
                 </div>
 
                 <div className="flex-1 md:text-right space-y-2">
@@ -35,17 +24,6 @@ export default function Footer() {
                     <div className="flex flex-col md:items-end gap-1">
                         <p className="text-white/90 font-medium">Candidate: <span className="text-blue-400">Kayke</span></p>
                         <p className="text-xs text-white/50">{new Date().getFullYear()} • Kayke Queiroz dos Santos</p>
-                    </div>
-                    <div className="flex md:justify-end gap-4 pt-4">
-                        <a
-                            href="https://github.com/Kayke-Queiroz"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-all border border-white/10"
-                            title="GitHub Profile"
-                        >
-                            <Github className="w-5 h-5 text-white" />
-                        </a>
                     </div>
                 </div>
             </div>
