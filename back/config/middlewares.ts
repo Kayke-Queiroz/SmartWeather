@@ -12,8 +12,8 @@ const config: Core.Config.Middlewares = [
       origin: [
         'http://localhost:5173',
         'http://localhost:5174',
-        /\.vercel\.app$/,         // cobre qualquer preview do Vercel
-        'https://smart-weather-sigma.vercel.app/', // ← troque pela sua URL exata do Vercel
+        /\.vercel\.app$/,
+        'https://smart-weather-sigma.vercel.app/',
       ],
     },
   },
