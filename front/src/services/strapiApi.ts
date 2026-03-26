@@ -51,13 +51,13 @@ export const strapiApi = {
     },
 
     // READ
-    async getRecords(): Promise<WeatherRecord[]> {
+    async getRecords(): Promise<WeatherRecord[] | null> {
         try {
             const res = await axios.get(`${STRAPI_URL}/weather-records?sort=createdAt:desc`);
             return res.data.data;
         } catch (e) {
             console.error('Failed to fetch from Strapi:', e);
-            return [];
+            return null;
         }
     },
 
