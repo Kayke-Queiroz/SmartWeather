@@ -43,10 +43,7 @@ export default function Home() {
         );
     };
 
-    const handleSearch = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!query.trim()) return;
-
+    const processLocation = async (locationInput: string | { lat: number; lon: number }) => {
         if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
             setError('Start date must be before or equal to the end date.');
             return;
@@ -56,8 +53,10 @@ export default function Home() {
         setError('');
 
         try {
-            const weatherData = await weatherApi.getCurrentWeather(query);
-            const forecastData = await weatherApi.getForecast(query);
+            // @ts-expect-error - dynamic overload resolution for the API
+            const weatherData = await weatherApi.getCurrentWeather(locationInput);
+            // @ts-expect-error
+            const forecastData = await weatherApi.getForecast(locationInput);
 
             let finalForecast = forecastData;
             if (startDate && endDate) {
@@ -72,6 +71,10 @@ export default function Home() {
                 }
             }
 
+            if (typeof locationInput !== 'string') {
+                setQuery(weatherData.name);
+            }
+
             setWeather(weatherData);
             setForecast(finalForecast);
 
@@ -82,9 +85,10 @@ export default function Home() {
                 setRefreshHistory(prev => prev + 1);
             });
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err: any) {
-            setError(err?.response?.status === 404 ? 'Location not found.' : 'Failed to fetch weather data. Please try again.');
+        } catch (err: unknown) {
+            // @ts-expect-error - err object from axios
+            const isNotFound = err?.response?.status === 404;
+            setError(isNotFound ? 'Location not found.' : 'Failed to fetch weather data. Please try again.');
             setWeather(null);
             setForecast(null);
             setInsight(null);
@@ -94,53 +98,14 @@ export default function Home() {
         }
     };
 
+    const handleSearch = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!query.trim()) return;
+        await processLocation(query);
+    };
+
     const handleMapClick = async (lat: number, lon: number) => {
-        if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
-            setError('Start date must be before or equal to the end date.');
-            return;
-        }
-
-        setLoading(true);
-        setError('');
-
-        try {
-            const weatherData = await weatherApi.getCurrentWeather({ lat, lon });
-            const forecastData = await weatherApi.getForecast({ lat, lon });
-
-            let finalForecast = forecastData;
-            if (startDate && endDate) {
-                const sDate = new Date(startDate).getTime();
-                const eDate = new Date(endDate).getTime() + 86400000;
-                const filteredList = forecastData.list.filter(item => {
-                    const itemDate = item.dt * 1000;
-                    return itemDate >= sDate && itemDate <= eDate;
-                });
-                if (filteredList.length > 0) {
-                    finalForecast = { ...forecastData, list: filteredList };
-                }
-            }
-
-            setQuery(weatherData.name);
-            setWeather(weatherData);
-            setForecast(finalForecast);
-
-            generateWeatherInsight(weatherData).then(aiTip => setInsight(aiTip));
-            youtubeApi.getVideoForLocation(weatherData.name).then(v => setVideo(v || 'not_found'));
-
-            strapiApi.saveRecord(weatherData.name, weatherData, finalForecast, startDate, endDate).then(() => {
-                setRefreshHistory(prev => prev + 1);
-            });
-
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err: any) {
-            setError(err?.response?.status === 404 ? 'Location not found.' : 'Failed to fetch weather data for this location. Please try again.');
-            setWeather(null);
-            setForecast(null);
-            setInsight(null);
-            setVideo(null);
-        } finally {
-            setLoading(false);
-        }
+        await processLocation({ lat, lon });
     };
 
     return (
