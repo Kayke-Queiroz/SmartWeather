@@ -131,21 +131,39 @@ The application is architected for modern cloud deployment, ensuring high availa
    cd front && npm install
    cd ../back && npm install
    ```
-2. **Environment Variables**: 
+2. **Frontend Environment Variables**: 
    Create a `.env` file in the `front/` directory and add your API keys:
    ```env
    VITE_OPENWEATHER_API_KEY=your_openweather_key
    VITE_HUGGINGFACE_API_KEY=your_huggingface_key
    VITE_YOUTUBE_API_KEY=your_youtube_key
-   VITE_STRAPI_URL=your_strapi_backend_url
+   VITE_STRAPI_URL=http://localhost:1337
    ```
-3. **Run**:
+3. **Backend Environment Variables**: 
+   Create a `.env` file in the `back/` directory (you can copy the contents of `.env.example`):
+   ```env
+   HOST=0.0.0.0
+   PORT=1337
+   APP_KEYS=toBeModified1,toBeModified2
+   API_TOKEN_SALT=tobemodified
+   ADMIN_JWT_SECRET=tobemodified
+   TRANSFER_TOKEN_SALT=tobemodified
+   JWT_SECRET=tobemodified
+   ENCRYPTION_KEY=tobemodified
+   ```
+4. **Run**:
    ```bash
-   # Front
-   npm run dev (in /front)
-   # Back
-   npm run develop (in /back)
+   # Front (in /front)
+   npm run dev
+   # Back (in /back)
+   npm run develop
    ```
+5. **Configure Strapi Permissions**:
+   - After running the backend, access the Admin Panel at `http://localhost:1337/admin` and create your administrator account.
+   - Navigate to **Settings > Users & Permissions Plugin > Roles**.
+   - Click on the **Public** role.
+   - Under the **Permissions** section, open your collection (e.g., `Weather`) and check the `create`, `find`, and `findOne` actions. This allows the frontend to save and fetch history data without authentication.
+   - Save the changes.
 
 ---
 
