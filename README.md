@@ -162,7 +162,7 @@ The application is architected for modern cloud deployment, ensuring high availa
    - After running the backend, access the Admin Panel at `http://localhost:1337/admin` and create your administrator account.
    - Navigate to **Settings > Users & Permissions Plugin > Roles**.
    - Click on the **Public** role.
-   - Under the **Permissions** section, open your collection (e.g., `Weather`) and check the `create`, `find`, and `findOne` actions. This allows the frontend to save and fetch history data without authentication.
+   - Under the **Permissions** section, open your collection (e.g., `Weather-record`) and check all CRUD actions: `create`, `find`, `findOne`, `update`, and `delete`. This allows the frontend to fully manage history data without authentication.
    - Save the changes.
 
 ---
