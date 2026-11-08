@@ -1,7 +1,11 @@
 import axios from 'axios';
 import type { WeatherData } from './api';
 
-const STRAPI_URL = `${import.meta.env.VITE_STRAPI_URL || 'http://localhost:1337'}/api`;
+const rawStrapiUrl = (import.meta.env.VITE_STRAPI_URL || 'https://smartweather-backend.onrender.com').trim();
+const cleanedUrl = rawStrapiUrl.includes('-xxxx')
+    ? 'https://smartweather-backend.onrender.com'
+    : rawStrapiUrl.replace(/\/+$/, '');
+const STRAPI_URL = `${cleanedUrl}/api`;
 const LOCAL_STORAGE_KEY = 'smartweather_history_records';
 
 export interface WeatherRecord {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import type { LeafletMouseEvent } from 'leaflet';
@@ -15,24 +15,23 @@ const customIcon = new L.DivIcon({
     popupAnchor: [0, -36],
 });
 
-function ChangeView({ center, zoom }: { center: [number, number]; zoom: number }) {
+// Compare primitives (lat, lon) to avoid re-triggering flyTo on every re-render
+function ChangeView({ lat, lon, zoom }: { lat: number; lon: number; zoom: number }) {
     const map = useMap();
     useEffect(() => {
-        map.flyTo(center, zoom, { animate: true, duration: 1.2 });
+        map.flyTo([lat, lon], zoom, { animate: true, duration: 1.0 });
         const timer = setTimeout(() => {
             map.invalidateSize();
-        }, 300);
+        }, 400);
         return () => clearTimeout(timer);
-    }, [center, zoom, map]);
+    }, [lat, lon, zoom, map]);
     return null;
 }
 
-function MapClickHandler({ onClick }: { onClick?: (lat: number, lon: number) => void }) {
+function MapClickHandler({ onClick }: { onClick: (lat: number, lon: number) => void }) {
     useMapEvents({
         click(e: LeafletMouseEvent) {
-            if (onClick) {
-                onClick(e.latlng.lat, e.latlng.lng);
-            }
+            onClick(e.latlng.lat, e.latlng.lng);
         },
     });
     return null;
@@ -47,7 +46,19 @@ interface WeatherMapProps {
 
 export default function WeatherMap({ lat, lon, locationName, onMapClick }: WeatherMapProps) {
     const markerRef = useRef<L.Marker>(null);
-    const markerPos: [number, number] = [lat, lon];
+    const [markerPos, setMarkerPos] = useState<[number, number]>([lat, lon]);
+
+    // Update marker when external coordinates change
+    useEffect(() => {
+        setMarkerPos([lat, lon]);
+    }, [lat, lon]);
+
+    const handleClick = useCallback((clickLat: number, clickLon: number) => {
+        setMarkerPos([clickLat, clickLon]);
+        if (onMapClick) {
+            onMapClick(clickLat, clickLon);
+        }
+    }, [onMapClick]);
 
     const eventHandlers = useMemo(
         () => ({
@@ -55,6 +66,7 @@ export default function WeatherMap({ lat, lon, locationName, onMapClick }: Weath
                 const marker = markerRef.current;
                 if (marker != null) {
                     const { lat: newLat, lng: newLng } = marker.getLatLng();
+                    setMarkerPos([newLat, newLng]);
                     if (onMapClick) onMapClick(newLat, newLng);
                 }
             },
@@ -63,25 +75,20 @@ export default function WeatherMap({ lat, lon, locationName, onMapClick }: Weath
     );
 
     return (
-        <div className="w-full h-[400px] rounded-2xl overflow-hidden shadow-lg border border-white/40 z-0 relative">
+        <div className="w-full h-[400px] rounded-2xl overflow-hidden shadow-lg border border-white/40 z-0 relative cursor-crosshair">
             <MapContainer
-                key={`${lat}-${lon}`}
                 center={markerPos}
                 zoom={12}
                 scrollWheelZoom={true}
                 style={{ height: '100%', width: '100%', zIndex: 0 }}
             >
-                <ChangeView center={markerPos} zoom={12} />
+                <ChangeView lat={lat} lon={lon} zoom={12} />
                 <TileLayer
                     attribution='&copy; <a href="https://carto.com/">CARTO</a>'
                     url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
                     className="map-tiles"
                 />
-                <MapClickHandler
-                    onClick={(clickLat, clickLon) => {
-                        if (onMapClick) onMapClick(clickLat, clickLon);
-                    }}
-                />
+                <MapClickHandler onClick={handleClick} />
                 <Marker
                     position={markerPos}
                     icon={customIcon}
