@@ -38,8 +38,8 @@ SmartWeather is a premium, full-stack weather intelligence platform that blends 
 | Area | Technologies |
 | :--- | :--- |
 | **Frontend** | React 19, Vite, TypeScript, Tailwind CSS 4, Framer Motion |
-| **Backend** | Strapi 5 (Headless CMS), SQLite |
-| **AI Layer** | Hugging Face Inference API (Qwen 2.5-72B), YouTube Data API v3 |
+| **Backend** | Strapi 5 (Headless CMS), SQLite, Render |
+| **AI Layer** | Google Gemini (Gemini 2.0 Flash), YouTube Data API v3 |
 | **Mapping** | React Leaflet (OpenStreetMap) |
 
 ---
@@ -54,9 +54,9 @@ graph TD
     B -->|Current Data| C[Frontend UI]
     B -->|Coordinates| D[YouTube Data API]
     B -->|Weather ID| E[Dynamic Animations]
-    C -->|Auto-save| F[Strapi Backend CMS]
+    C -->|Auto-save| F[Strapi Backend CMS on Render]
     F -->|Historical Data| G[Search History Page]
-    B -->|Context| H[Hugging Face AI]
+    B -->|Context| H[Google Gemini AI]
     H -->|Insights| C
     D -->|4K Drone Tour| C
 ```
@@ -102,7 +102,7 @@ One of the project's key differentiators is its **weather-reactive background sy
 ##  Engineering Highlights
 
 - **Decoupled Full-Stack Architecture**: Clean separation between the React frontend and Strapi backend allows for independent scaling and maintenance.
-- **AI-Driven Personalization**: Leveraging **Qwen 2.5-72B** to provide non-generic health warnings and clothing suggestions based on humidity, temperature, and wind.
+- **AI-Driven Personalization**: Leveraging **Google Gemini (Gemini 2.0 Flash)** to provide non-generic health warnings and clothing suggestions based on humidity, temperature, and wind.
 - **Optimized Data Export**: Custom implementation for history export to **JSON** and **CSV** formats directly from the frontend.
 - **CORS & Proxy Resilience**: Engineered robust API service layers to handle cross-origin requests and best-effort backend warmups.
 
@@ -120,7 +120,7 @@ One of the project's key differentiators is its **weather-reactive background sy
 The application is architected for modern cloud deployment, ensuring high availability and separation of concerns:
 
 - **Frontend:** Hosted on **Vercel**, leveraging edge functions for fast global delivery.
-- **Backend:** Powered by **Strapi Cloud**, providing a robust headless CMS infrastructure.
+- **Backend:** Hosted on **Render**, providing a permanent and robust Strapi Headless CMS infrastructure.
 
 ---
 
@@ -135,7 +135,7 @@ The application is architected for modern cloud deployment, ensuring high availa
    Create a `.env` file in the `front/` directory and add your API keys:
    ```env
    VITE_OPENWEATHER_API_KEY=your_openweather_key
-   VITE_HUGGINGFACE_API_KEY=your_huggingface_key
+   VITE_GEMINI_API_KEY=your_gemini_key
    VITE_YOUTUBE_API_KEY=your_youtube_key
    VITE_STRAPI_URL=http://localhost:1337
    ```
