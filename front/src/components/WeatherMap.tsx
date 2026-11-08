@@ -1,7 +1,8 @@
-import { useEffect, useState, useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import type { LeafletMouseEvent } from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 const customIcon = new L.DivIcon({
     className: 'bg-transparent border-none',
@@ -17,12 +18,25 @@ const customIcon = new L.DivIcon({
 function ChangeView({ center, zoom }: { center: [number, number]; zoom: number }) {
     const map = useMap();
     useEffect(() => {
-        map.flyTo(center, zoom, { animate: true, duration: 1.5 });
+        map.flyTo(center, zoom, { animate: true, duration: 1.2 });
+        const timer = setTimeout(() => {
+            map.invalidateSize();
+        }, 300);
+        return () => clearTimeout(timer);
     }, [center, zoom, map]);
     return null;
 }
 
-// MapEvents removed from global scope to access inner state
+function MapClickHandler({ onClick }: { onClick?: (lat: number, lon: number) => void }) {
+    useMapEvents({
+        click(e: LeafletMouseEvent) {
+            if (onClick) {
+                onClick(e.latlng.lat, e.latlng.lng);
+            }
+        },
+    });
+    return null;
+}
 
 interface WeatherMapProps {
     lat: number;
@@ -32,53 +46,42 @@ interface WeatherMapProps {
 }
 
 export default function WeatherMap({ lat, lon, locationName, onMapClick }: WeatherMapProps) {
-    const [markerPos, setMarkerPos] = useState<[number, number]>([lat, lon]);
     const markerRef = useRef<L.Marker>(null);
-
-    // Sync only on external prop changes (initial or search bar)
-    useEffect(() => {
-        setMarkerPos([lat, lon]);
-    }, [lat, lon]);
+    const markerPos: [number, number] = [lat, lon];
 
     const eventHandlers = useMemo(
         () => ({
             dragend() {
                 const marker = markerRef.current;
                 if (marker != null) {
-                    const { lat, lng } = marker.getLatLng();
-                    setMarkerPos([lat, lng]);
-                    if (onMapClick) onMapClick(lat, lng);
+                    const { lat: newLat, lng: newLng } = marker.getLatLng();
+                    if (onMapClick) onMapClick(newLat, newLng);
                 }
             },
         }),
         [onMapClick]
     );
 
-    function MapEventsInner() {
-        useMapEvents({
-            click(e: LeafletMouseEvent) {
-                setMarkerPos([e.latlng.lat, e.latlng.lng]);
-                if (onMapClick) onMapClick(e.latlng.lat, e.latlng.lng);
-            },
-        });
-        return null;
-    }
-
     return (
         <div className="w-full h-[400px] rounded-2xl overflow-hidden shadow-lg border border-white/40 z-0 relative">
             <MapContainer
+                key={`${lat}-${lon}`}
                 center={markerPos}
-                zoom={13}
+                zoom={12}
                 scrollWheelZoom={true}
                 style={{ height: '100%', width: '100%', zIndex: 0 }}
             >
-                <ChangeView center={markerPos} zoom={13} />
+                <ChangeView center={markerPos} zoom={12} />
                 <TileLayer
                     attribution='&copy; <a href="https://carto.com/">CARTO</a>'
                     url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
                     className="map-tiles"
                 />
-                <MapEventsInner />
+                <MapClickHandler
+                    onClick={(clickLat, clickLon) => {
+                        if (onMapClick) onMapClick(clickLat, clickLon);
+                    }}
+                />
                 <Marker
                     position={markerPos}
                     icon={customIcon}
@@ -89,7 +92,7 @@ export default function WeatherMap({ lat, lon, locationName, onMapClick }: Weath
                     <Popup>
                         <div className="text-center p-1">
                             <p className="font-semibold text-slate-800 text-sm">{locationName}</p>
-                            <p className="text-xs text-slate-500 mt-1">Weather Location</p>
+                            <p className="text-xs text-slate-500 mt-1">Lat: {markerPos[0].toFixed(2)}, Lon: {markerPos[1].toFixed(2)}</p>
                         </div>
                     </Popup>
                 </Marker>

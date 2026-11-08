@@ -15,6 +15,8 @@ const config: Core.Config.Middlewares = [
         'http://localhost:5174',
         'https://smart-weather-sigma.vercel.app',
         /\.vercel\.app$/,
+        /\.onrender\.com$/,
+        '*',
       ],
     },
   },

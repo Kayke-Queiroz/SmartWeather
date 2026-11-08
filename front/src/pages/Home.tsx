@@ -53,9 +53,7 @@ export default function Home() {
         setError('');
 
         try {
-            // @ts-expect-error - dynamic overload resolution for the API
             const weatherData = await weatherApi.getCurrentWeather(locationInput);
-            // @ts-expect-error
             const forecastData = await weatherApi.getForecast(locationInput);
 
             let finalForecast = forecastData;
@@ -71,17 +69,23 @@ export default function Home() {
                 }
             }
 
+            const locationDisplayName = weatherData.name?.trim() || (
+                typeof locationInput === 'object'
+                    ? `Location (${locationInput.lat.toFixed(2)}, ${locationInput.lon.toFixed(2)})`
+                    : `Location (${weatherData.coord.lat.toFixed(2)}, ${weatherData.coord.lon.toFixed(2)})`
+            );
+
             if (typeof locationInput !== 'string') {
-                setQuery(weatherData.name);
+                setQuery(locationDisplayName);
             }
 
             setWeather(weatherData);
             setForecast(finalForecast);
 
             generateWeatherInsight(weatherData).then(aiTip => setInsight(aiTip));
-            youtubeApi.getVideoForLocation(weatherData.name).then(v => setVideo(v || 'not_found'));
+            youtubeApi.getVideoForLocation(locationDisplayName).then(v => setVideo(v || 'not_found'));
 
-            strapiApi.saveRecord(weatherData.name, weatherData, finalForecast, startDate, endDate).then(() => {
+            strapiApi.saveRecord(locationDisplayName, weatherData, finalForecast, startDate, endDate).then(() => {
                 setRefreshHistory(prev => prev + 1);
             });
 
@@ -190,6 +194,26 @@ export default function Home() {
                                 ℹ️ The free API tier does not support past historical data. Dates act as a filter for the upcoming 5-day forecast.
                             </p>
                         </motion.div>
+                    )}
+
+                    {!weather && (
+                        <div className="flex flex-wrap justify-center items-center gap-2 mt-4">
+                            <span className="text-xs text-white/75 font-medium">Quick search:</span>
+                            {['London', 'New York', 'Tokyo', 'Paris', 'São Paulo'].map((city) => (
+                                <button
+                                    key={city}
+                                    type="button"
+                                    onClick={() => {
+                                        setQuery(city);
+                                        processLocation(city);
+                                    }}
+                                    disabled={loading}
+                                    className="px-3.5 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-semibold backdrop-blur-md border border-white/30 transition-all shadow-sm disabled:opacity-50 cursor-pointer"
+                                >
+                                    📍 {city}
+                                </button>
+                            ))}
+                        </div>
                     )}
 
                     {error && <p className="text-red-500 text-sm mt-3 font-bold text-center drop-shadow-md">{error}</p>}

@@ -10,28 +10,20 @@ export default function SearchHistory({ refreshTrigger }: { refreshTrigger: numb
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editValue, setEditValue] = useState('');
 
-    const loadRecords = async (retryCount = 0) => {
+    const loadRecords = async () => {
         setLoading(true);
-        const data = await strapiApi.getRecords();
-        
-        // data is null when an error occurs (like connection refused during cold start)
-        if (data === null) {
-            if (retryCount < 24) {
-                console.log(`Strapi API unreachable (cold start). Retrying in 5s... (Attempt ${retryCount + 1}/24)`);
-                setTimeout(() => loadRecords(retryCount + 1), 5000);
-            } else {
-                setLoading(false); // give up after 2 minutes
-            }
-            return;
+        try {
+            const data = await strapiApi.getRecords();
+            setRecords(data || []);
+        } catch {
+            setRecords([]);
+        } finally {
+            setLoading(false);
         }
-
-        setRecords(data);
-        setLoading(false);
     };
 
     useEffect(() => {
         loadRecords();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [refreshTrigger]);
 
     const handleDelete = async (documentId: string) => {
