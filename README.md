@@ -108,10 +108,9 @@ One of the project's key differentiators is its **weather-reactive background sy
 
 ---
 
-##  Candidate Information
-*   **Name:** Kayke Queiroz dos Santos
-*   **Assessment:** AI Engineer Intern Technical Assessment
-*   **Organization:** [PM Accelerator](https://www.linkedin.com/company/product-management-accelerator/)
+##  Author
+*   **Developer:** Kayke Queiroz dos Santos
+*   **Project:** SmartWeather — AI-Powered Weather Intelligence Platform
 
 ---
 
@@ -119,8 +118,8 @@ One of the project's key differentiators is its **weather-reactive background sy
 
 The application is architected for modern cloud deployment, ensuring high availability and separation of concerns:
 
-- **Frontend:** Hosted on **Vercel**, leveraging edge functions for fast global delivery.
-- **Backend:** Hosted on **Render**, providing a permanent and robust Strapi Headless CMS infrastructure.
+- **Frontend:** Hosted on **[Vercel](https://smart-weather-sigma.vercel.app/)**, leveraging edge functions for fast global delivery.
+- **Backend:** Hosted on **[Render](https://smartweather-backend.onrender.com)**, providing a permanent and robust Strapi 5 Headless CMS infrastructure.
 
 ---
 
@@ -167,8 +166,4 @@ The application is architected for modern cloud deployment, ensuring high availa
 
 ---
 
-## PM Accelerator Description
-*Product Manager Accelerator is a premier community and program designed to help professionals transition into and accelerate their careers in product management and AI-engineering through hands-on experience and expert mentorship.*
-
----
 
