@@ -15,6 +15,21 @@ const customIcon = new L.DivIcon({
     popupAnchor: [0, -36],
 });
 
+// Ensures Leaflet calculates the container size after Framer Motion animations
+function MapInitializer() {
+    const map = useMap();
+    useEffect(() => {
+        map.invalidateSize();
+        const timers = [
+            setTimeout(() => map.invalidateSize(), 150),
+            setTimeout(() => map.invalidateSize(), 400),
+            setTimeout(() => map.invalidateSize(), 800),
+        ];
+        return () => timers.forEach(clearTimeout);
+    }, [map]);
+    return null;
+}
+
 // Compare primitives (lat, lon) to avoid re-triggering flyTo on every re-render
 function ChangeView({ lat, lon, zoom }: { lat: number; lon: number; zoom: number }) {
     const map = useMap();
@@ -22,7 +37,7 @@ function ChangeView({ lat, lon, zoom }: { lat: number; lon: number; zoom: number
         map.flyTo([lat, lon], zoom, { animate: true, duration: 1.0 });
         const timer = setTimeout(() => {
             map.invalidateSize();
-        }, 400);
+        }, 300);
         return () => clearTimeout(timer);
     }, [lat, lon, zoom, map]);
     return null;
@@ -75,18 +90,19 @@ export default function WeatherMap({ lat, lon, locationName, onMapClick }: Weath
     );
 
     return (
-        <div className="w-full h-[400px] rounded-2xl overflow-hidden shadow-lg border border-white/40 z-0 relative cursor-crosshair">
+        <div className="w-full h-[400px] min-h-[400px] rounded-2xl overflow-hidden shadow-lg border border-white/40 z-0 relative cursor-crosshair bg-slate-900/40">
             <MapContainer
                 center={markerPos}
                 zoom={12}
                 scrollWheelZoom={true}
-                style={{ height: '100%', width: '100%', zIndex: 0 }}
+                style={{ height: '100%', width: '100%', minHeight: '400px', zIndex: 0 }}
             >
+                <MapInitializer />
                 <ChangeView lat={lat} lon={lon} zoom={12} />
                 <TileLayer
-                    attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-                    url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-                    className="map-tiles"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    maxZoom={19}
                 />
                 <MapClickHandler onClick={handleClick} />
                 <Marker
